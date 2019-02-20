@@ -22,6 +22,10 @@
     },
     "storageAccountName": {
       "type": "string"
+    },
+    "createExternalIp": {
+      "type": "bool",
+      "defaultValue": "false"
     }
   },
   "variables": {
@@ -53,6 +57,7 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
+                "condition": "[parameters('createExternalIp')]",
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
               },
               "subnet": {
