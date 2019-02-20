@@ -32,8 +32,7 @@
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
-      "location": "[parameters('existingVnetLocation')]"
-      ],
+      "location": "[parameters('existingVnetLocation')]",
       "properties": {
         "ipConfigurations": [
           {
