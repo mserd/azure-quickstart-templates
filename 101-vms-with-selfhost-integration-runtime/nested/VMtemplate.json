@@ -25,7 +25,7 @@
     },
     "createExternalIp": {
       "type": "bool",
-      "defaultValue": "false"
+      "defaultValue": "true"
     }
   },
   "variables": {
@@ -34,6 +34,7 @@
   },
   "resources": [
     {
+      "condition": "[parameters('createExternalIp')]",
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[variables('publicIPAddressName')]",
@@ -43,6 +44,7 @@
       }
     },
     {
+      "condition": "[parameters('createExternalIp')]",
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
@@ -57,9 +59,34 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "condition": "[parameters('createExternalIp')]",
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
               },
+              "subnet": {
+                "id": "[parameters('subnetId')]"
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+          "id": "[parameters('nsgId')]"
+        }
+      }
+    },
+    {
+      "condition": "[not(parameters('createExternalIp'))]",
+      "apiVersion": "2016-03-30",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('nicName')]",
+      "location": "[parameters('existingVnetLocation')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[parameters('subnetId')]"
               }
