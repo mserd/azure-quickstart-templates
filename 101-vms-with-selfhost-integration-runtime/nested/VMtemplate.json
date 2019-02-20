@@ -76,7 +76,7 @@
       "condition": "[not(parameters('createExternalIp'))]",
       "apiVersion": "2016-03-30",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('nicName')]",
+      "name": "[concat(variables('nicName'), "internalonly")]",
       "location": "[parameters('existingVnetLocation')]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
